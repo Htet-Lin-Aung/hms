@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+use App\Repositories\{RoomRepository,RoomServiceRepository,
+    RoomTypeRepository,CustomerRepository};
+use App\Repositories\Interfaces\{RoomInterface,RoomServiceInterface,
+    RoomTypeInterface,CustomerInterface};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(RoomInterface::class,RoomRepository::class);
+        $this->app->bind(RoomServiceInterface::class,RoomServiceRepository::class);
+        $this->app->bind(RoomTypeInterface::class,RoomTypeRepository::class);
+        $this->app->bind(CustomerInterface::class,CustomerRepository::class);
     }
 
     /**
@@ -23,6 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 }
