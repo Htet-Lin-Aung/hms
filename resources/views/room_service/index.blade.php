@@ -8,7 +8,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Rooms
+            <h6 class="m-0 font-weight-bold text-primary">Room Services
                 <a href="{{ route('admin.room-service.create') }}" class="btn btn-primary float-right">Add New</a>
             </h6>
         </div>
@@ -19,40 +19,31 @@
                     <thead class="table-primary">
                         <tr>
                             <th>#</th>
-                            <th>Room Service Name</th>
-                            <th colspan="2">Action</th>
-                        </tr>
-                    </thead>
-                    <!-- <tfoot class="table-primary">
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Room Type</th>
-                            <th>Room Details</th>
+                            <th>Service Name</th>
                             <th>Action</th>
                         </tr>
-                    </tfoot> -->
+                    </thead>
                     <tbody>
-						@foreach ($room_services as $room_service )
-							<tr>
-								<td>{{ $room_service->id }}</td>
-								<td>{{ $room_service->name }}</td>
-								<td >
-									<a href="{{ route('admin.room-service.show',$room_service) }}" class="btn btn-info btn-sm"> <i class="fa fa-eye"></i></a>
-									<a href="{{ route('admin.room-service.edit',$room_service) }}" class="btn btn-primary btn-sm"> <i class="fa fa-edit"></i> </a>
+                        @foreach ($room_services as $index => $room_service )
+                            <tr>
+                                <td>{{ $index+1 }}</td>
+                                <td>{{ $room_service->name }}</td>
+                                <td>
+                                    <a href="{{ route('admin.room-service.show',$room_service) }}" class="btn btn-info btn-sm"> <i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('admin.room-service.edit',$room_service) }}" class="btn btn-primary btn-sm"> <i class="fa fa-edit"></i> </a>
                                     <form action="{{ route('admin.room-service.destroy',$room_service)  }}" method="POST" class="d-unset">
                                         @method('DELETE')
                                         @csrf
                                         <button onClick="return confirm('Are you sure you want to delete?')"class="btn btn-danger btn-sm"> <i class="fa fa-trash"></i> </button>
                                     </form>
                                 </td>
-							</tr>
-						@endforeach
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-<!-- /.container-fluid -->
+@include('common.datatable-js')
 @endsection

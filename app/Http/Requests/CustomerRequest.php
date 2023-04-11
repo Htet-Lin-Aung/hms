@@ -30,6 +30,7 @@ class CustomerRequest extends FormRequest
             'nrc_township' => 'required',
             'nrc_type' => 'required',
             'nrc_no' => 'required',
+            'other_nrc' => 'required',
             'email' => 'nullable|email',
             'phone' => 'required',
             'address' => 'required',

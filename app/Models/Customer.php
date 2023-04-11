@@ -10,7 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Customer extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
-    protected $fillable = ['room_id','name','nrc_region','nrc_township','nrc_type','nrc_no','email','phone','address','check_in','check_out','status'];
+    protected $fillable = ['room_id','name','nrc_region','nrc_township','nrc_type','nrc_no','other_nrc','email','phone','address','check_in','check_out','payment_status','status'];
 
     public function getNrcAttribute()
     {
@@ -24,5 +24,20 @@ class Customer extends Model implements HasMedia
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function getPrepaidAttribute()
+    {
+        return $this->transactions()->wherePaymentType('prepaid')->sum('amount');
+    }
+
+     public function getBalanceAttribute()
+    {
+        return $this->transactions()->sum('amount');
     }
 }

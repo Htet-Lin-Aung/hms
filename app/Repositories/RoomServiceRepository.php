@@ -9,7 +9,7 @@ class RoomServiceRepository implements RoomServiceInterface
 {
 	public function allRoomServices()
 	{
-        $room_services = RoomService::paginate(30);
+        $room_services = RoomService::latest()->cursor();
 		return $room_services;
 	}
 

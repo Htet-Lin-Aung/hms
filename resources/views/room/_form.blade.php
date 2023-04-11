@@ -93,6 +93,12 @@
                     </div>
                 </div>
 
+                <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div id="upload_preview" class="row" style="margin:10px;"></div>
+                </div>
+
                 @if($room)
                     <div class="row justify-content-center">
                     @foreach($room->getMedia('images') as $image)
@@ -101,7 +107,7 @@
                     </div>
                 @endif
 
-                <div class="row mt-3">
+                <div class="col-md-12 mt-3">
                     <div class="col text-center">
                         <button type="submit" class="btn btn-primary">{{$btn}}</button>
                     </div>
@@ -114,6 +120,7 @@
 <!-- /.container-fluid -->
 @endsection
 @section('scripts')
+@include('common.image_preview')
 <script>
     function showImage(){
         $('.imageWrapper').attr('hidden','hidden');

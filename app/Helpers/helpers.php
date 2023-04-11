@@ -10,19 +10,33 @@ use App\Models\Nrc;
 
     if(! function_exists('get_nrc_townships')) {
         function get_nrc_townships(){
-            return Nrc::pluck('short_district_mm','id');
+            return Nrc::pluck('township_mm','id');
         }
     }
 
     if(! function_exists('get_township_name')) {
         function get_township_name($id){
-            return Nrc::whereId($id)->pluck('short_district_mm')->first();
+            return Nrc::whereId($id)->pluck('township_mm')->first();
         }
     }
 
     if(! function_exists('get_nrc_types')) {
         function get_nrc_types(){
             return config('form.nrc_types_mm');
+        }
+    }
+
+    /**
+     * Get nrc township codes by region code
+     *
+     * @return Collection
+     */
+
+     if(! function_exists('getNrcTownshipCodesByRegionCode')){
+        function getNrcTownshipCodesByRegionCode($region_code){
+            $nrcs = Nrc::whereRegionEn($region_code)->select('id','township_mm')->get();
+
+            return $nrcs;
         }
     }
 ?>

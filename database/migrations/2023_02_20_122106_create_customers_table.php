@@ -21,12 +21,15 @@ class CreateCustomersTable extends Migration
             $table->string('nrc_township');
             $table->string('nrc_type');
             $table->Integer('nrc_no');
+            $table->string('other_nrc');
             $table->string('email')->nullable();
             $table->Integer('phone');
             $table->string('address');
+            $table->string('revenue_source');
             $table->date('check_in');
             $table->date('check_out');
-            $table->string('status');
+            $table->string('payment_status')->default('pending');
+            $table->string('status')->default('checkin');
             $table->timestamps();
         });
     }

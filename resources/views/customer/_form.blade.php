@@ -14,8 +14,8 @@
             <form method="POST" action="{{ $route }}" enctype="multipart/form-data">
                 @method($method)
                 @csrf
-
-                <div class="row">
+                
+                <div class="row mb-3">
                     <div class="col-md-2">
                         <label for="status">Booking ?</label>
                     </div>
@@ -25,7 +25,7 @@
                     </div>
                 </div> 
 
-                <div class="row mt-3">
+                <div class="row">
                     <div class="col-md-2 required">
                         <label for="address">Date</label>
                     </div>
@@ -43,19 +43,30 @@
                     </div>
                 </div>
 
-                <input type="hidden" value={{$customer? $customer->check_in : ''}} id="check_in"/>
-                <input type="hidden" value={{$customer? $customer->check_out : ''}} id="check_out"/>
+                <input type="hidden" value="{{$customer? $customer->check_in : 'null'}}" id="check_in"/>
+                <input type="hidden" value="{{$customer? $customer->check_out : 'null'}}" id="check_out"/>
+
+                <div class="row mt-3">
+                    <div class="col-md-2 required">
+                        <label for="people">People</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="custom-select @error('people') is-invalid @enderror" name="people" id="people">
+                            
+                        </select> 
+                        @error('people')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
 
                 <div class="row mt-3">
                     <div class="col-md-2 required">
                         <label for="room_id">Room No./ Name</label>
                     </div>
                     <div class="col-md-8">
-                        <select class="custom-select @error('room_id') is-invalid @enderror" name="room_id">
-                            <option value="">Choose...</option>
-                            @foreach($rooms as $room)
-                                <option value="{{ $room->id }}" @if($customer && $room->id == $customer->room_id) selected @endif>{{ $room->room_no }}</option>
-                            @endforeach
+                        <select class="custom-select @error('room_id') is-invalid @enderror" name="room_id" id="rest_room">
+                            
                         </select> 
                         @error('room_id')
                             <span class="text-danger">{{$message}}</span>
@@ -80,16 +91,14 @@
                         <label for="nrc_region">NRC</label>
                     </div>
                     <div class="col-md-8">
-                        <select class="custom-select nrc nrc-region @error('nrc_region') is-invalid @enderror" name="nrc_region">
+                        <select class="custom-select nrc nrc-region @error('nrc_region') is-invalid @enderror" name="nrc_region" id="nrc_region">
                             @foreach($nrc_regions as $region)
                                 <option value="{{ $region['value'] }}" @if($customer && $region['value'] == $customer->nrc_region) selected @endif>{{ $region['name'] }}</option>
                             @endforeach
                         </select> 
 
-                        <select class="custom-select nrc nrc-township @error('nrc_township') is-invalid @enderror" name="nrc_township">
-                            @foreach($nrc_townships as $index => $township)
-                                <option value="{{ $index }}" @if($customer && $township == $customer->nrc_township) selected @endif>{{ $township }}</option>
-                            @endforeach
+                        <select class="custom-select nrc nrc-township @error('nrc_township') is-invalid @enderror" name="nrc_township" id="nrc_township">
+                            
                         </select>
 
                         <select class="custom-select nrc nrc-type @error('nrc_type') is-invalid @enderror" name="nrc_type">
@@ -110,6 +119,18 @@
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                         @error('nrc_no')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-2 required">
+                        <label for="other_nrc">Other NRC</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" name="other_nrc" class="form-control @error('other_nrc') is-invalid @enderror" autocomplete=off>{{$customer ? $customer->other_nrc : old('other_nrc')}}</textarea>
+                        @error('other_nrc')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
@@ -159,6 +180,7 @@
                         <div class="custom-file mb-3">
                             <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="customFile" name="images[]" multiple>
                             <label class="custom-file-label" for="customFile">Choose file</label>
+                            
                         </div>
                         @error('images')
                             <span class="text-danger">{{$message}}</span>
@@ -167,6 +189,12 @@
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-8">
+                      <div id="upload_preview" class="row" style="margin:10px;"></div>
+                  </div>
                 </div>
 
                 @if($customer)
@@ -190,8 +218,10 @@
 <!-- /.container-fluid -->
 @endsection
 @section('scripts')
+@include('common.image_preview')
 <script>
-$('.t-datepicker').tDatePicker({
+var t_datepicker = $('.t-datepicker');
+t_datepicker.tDatePicker({
   // the number of calendars
   numCalendar    : 2,
 
@@ -211,6 +241,120 @@ $('.t-datepicker').tDatePicker({
   dateCheckIn: $('#check_in').val(),
   dateCheckOut: $('#check_out').val(),
 
-});
+}).on('afterCheckOut',function(e, dataDate){
+    let check_in = new Date(dataDate[0]).toISOString().slice(0,10) // check-in
+    let check_out = new Date(dataDate[1]).toISOString().slice(0,10) // check-out
+
+    $('#check_in').val(check_in);
+    $('#check_out').val(check_out);
+
+    getRestRoomsByPeople(check_in,check_out);
+})
+
+if('null' != $('#check_in').val()){
+    getRestRoomsByPeople($('#check_in').val(),$('#check_out').val());
+}
+
+getNrcTownship($('#nrc_region').val());
+
+$('#nrc_region').on('change', function(){
+    let region_code = $(this).find(':selected').val();
+    getNrcTownship(region_code);
+})
+
+$('#people').on('change', function(){
+     var people = $('#people').val();
+     var checkin = $('#check_in').val();
+     var checkout = $('#check_out').val();
+     console.log("checkin: "+checkin,"checkout: "+checkout);
+     getRestRooms(people,checkin,checkout);
+})
+
+function getNrcTownship(region_code)
+{
+    $.ajax({
+        type: 'get',
+        url: "{{ route('admin.customer.getNrcTownships') }}",
+        data:{
+            region_code : region_code
+        },
+        headers: {
+            'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(response) {
+
+            if(response){
+                $('#nrc_township').empty().append("<option value='' disabled></option>");
+                for(township of response){
+                    $('#nrc_township').append($('<option>', {
+                        value: township.id,
+                        text : township.township_mm
+                    }));
+                }
+            }
+        }
+    });
+}
+
+function getRestRoomsByPeople(checkin,checkout)
+{
+    var selectedpeople = ({!! $customer ? json_encode($customer->room->people) : 0 !!});
+    $.ajax({
+        type: 'get',
+        url: "{{ route('admin.customer.getRestRoomsByPeople') }}",
+        data:{
+            checkin : checkin,
+            checkout: checkout,
+            people: selectedpeople
+        },
+        headers: {
+            'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(response) {
+            if(response){
+                $('#people').empty().append("<option value='' disabled></option>");
+                $('#people').append(response);
+            }
+            getRestRooms($('#people').val(),checkin,checkout);
+        }
+    });
+}
+
+function getRestRooms(people,checkin,checkout)
+{
+     var selectedCheckIn = ({!! $customer ? json_encode($customer->check_in) : 0 !!});
+     var selectedRoomId = ({!! $customer ? json_encode($customer->room_id) : 0 !!});
+     var selectedRoomNo = ({!! $customer ? json_encode($customer->room->room_no) : 0 !!});
+     var room_id = 0;var room_no = 0;
+    if($('#check_in').val() == selectedCheckIn)
+    {
+        room_id = selectedRoomId;
+        room_no = selectedRoomNo;
+    }
+
+    $.ajax({
+        type: 'get',
+        url: "{{ route('admin.customer.getRestRooms') }}",
+        data:{
+            people: people,
+            checkin: checkin,
+            checkout: checkout,
+            room_id: room_id,
+            room_no: room_no
+        },
+        headers: {
+            'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(response) {
+            console.log(response)
+            if(response){
+                $('#rest_room').empty().append("<option value='' disabled></option>");
+
+                $('#rest_room').append(response);
+                
+            }
+        }
+    });
+}
 </script>
 @stop

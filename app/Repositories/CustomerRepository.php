@@ -9,7 +9,7 @@ class CustomerRepository implements CustomerInterface
 {
 	public function allCustomers($request)
 	{
-		$customers = Customer::whereStatus($request->status)->latest()->paginate(30);
+		$customers = Customer::whereStatus($request->status)->latest()->cursor();
 		return $customers;
 	}
 

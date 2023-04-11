@@ -9,7 +9,7 @@ class RoomTypeRepository implements RoomTypeInterface
 {
 	public function allRoomTypes()
 	{
-        $room_types = RoomType::latest()->paginate(30);
+        $room_types = RoomType::latest()->cursor();
 		return $room_types;
 	}
 

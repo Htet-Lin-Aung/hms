@@ -24,6 +24,10 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
+        if($request->status == NULL)
+        {
+            return redirect()->to('/admin/customer?status=booking');
+        }
         $customers = $this->customerRepository->allCustomers($request);
         return view('customer.index',compact('customers'));
     }
@@ -35,11 +39,10 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $rooms = $this->roomRepository->allRooms();
         $nrc_regions = get_nrc_regions();
         $nrc_townships = get_nrc_townships();
         $nrc_types = get_nrc_types();
-        return view('customer.create',compact('rooms','nrc_regions','nrc_townships','nrc_types'));
+        return view('customer.create',compact('nrc_regions','nrc_townships','nrc_types'));
     }
 
     /**
@@ -73,11 +76,10 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $rooms = $this->roomRepository->allRooms();
         $nrc_regions = get_nrc_regions();
         $nrc_townships = get_nrc_townships();
         $nrc_types = get_nrc_types();
-        return view('customer.edit',compact('customer','rooms','nrc_regions','nrc_townships','nrc_types'));
+        return view('customer.edit',compact('customer','nrc_regions','nrc_townships','nrc_types'));
     }
 
     /**
@@ -107,8 +109,24 @@ class CustomerController extends Controller
 
     public function changeState(Request $request, Customer $customer)
     {
-        // dd($request->status,$customer);
         $customer->update(['status'=>$request->status]);
         return redirect()->back()->with('success','Successfully changed');
+    }
+
+    public function getNrcTownships(Request $request)
+    {
+        //Helper function
+        return getNrcTownshipCodesByRegionCode($request->region_code);
+    }
+
+    public function getRestRoomsByPeople(Request $request)
+    {
+        $rooms = $this->roomRepository->getRestRoomsByPeople($request->checkin,$request->checkout,$request->people);
+        return $rooms;
+    }
+    public function getRestRooms(Request $request)
+    {
+        $rooms = $this->roomRepository->getRestRooms($request->people,$request->checkin,$request->checkout,$request->room_id,$request->room_no);
+        return $rooms;
     }
 }

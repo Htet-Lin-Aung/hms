@@ -16,7 +16,7 @@
                 @method($method)
                 <div class="row">
                     <div class="col-md-2">
-                        <label for="name">Room Service Name</label>
+                        <label for="name">Service Name</label>
                     </div>
                     <div class="col-md-8">
                         <input type="text" name="name" value="{{$room_service ? $room_service->name : old('name')}}" class="form-control @error('name') is-invalid @enderror" autocomplete=off/>
