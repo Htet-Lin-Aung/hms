@@ -10,7 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Customer extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
-    protected $fillable = ['room_id','name','nrc_region','nrc_township','nrc_type','nrc_no','other_nrc','email','phone','address','check_in','check_out','payment_status','status'];
+    protected $fillable = ['room_id','name','nrc_region','nrc_township','nrc_type','nrc_no','other_nrc','email','phone','address','check_in','check_out','payment_status','status','revenue_source'];
 
     public function getNrcAttribute()
     {

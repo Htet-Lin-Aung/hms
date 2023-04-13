@@ -5,9 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\{RoomRepository,RoomServiceRepository,
-    RoomTypeRepository,CustomerRepository};
+    RoomTypeRepository,CustomerRepository,PermissionRepository,RoleRepository,UserRepository};
 use App\Repositories\Interfaces\{RoomInterface,RoomServiceInterface,
-    RoomTypeInterface,CustomerInterface};
+    RoomTypeInterface,CustomerInterface,PermissionInterface,RoleInterface,UserInterface};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RoomServiceInterface::class,RoomServiceRepository::class);
         $this->app->bind(RoomTypeInterface::class,RoomTypeRepository::class);
         $this->app->bind(CustomerInterface::class,CustomerRepository::class);
+        $this->app->bind(PermissionInterface::class,PermissionRepository::class);
+        $this->app->bind(RoleInterface::class,RoleRepository::class);
+        $this->app->bind(UserInterface::class,UserRepository::class);
     }
 
     /**

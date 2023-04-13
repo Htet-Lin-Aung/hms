@@ -171,6 +171,22 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-2 required">
+                        <label for="revenue_source">Revenue Source</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="custom-select @error('revenue_source') is-invalid @enderror" name="revenue_source">
+                            @foreach(get_revenue_sources() as $source)
+                                <option value="{{ $source['value'] }}" @if($customer && $source['value'] == $customer->revenue_source) selected @endif>{{ $source['name'] }}</option>
+                            @endforeach
+                        </select> 
+                        @error('revenue_source')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
                 
                 <div class="row mt-3 imageWrapper">
                     <div class="col-md-2 required">

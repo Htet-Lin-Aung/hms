@@ -52,6 +52,8 @@ class DashboardController extends Controller
             ->pluck('amount')
             ->toArray();
 
-        return view('dashboard',compact('customers','room_count','monthlyAmounts'));
+        $revenue_sources = [50,25,25];
+
+        return view('dashboard',compact('customers','room_count','monthlyAmounts','revenue_sources'));
     }
 }

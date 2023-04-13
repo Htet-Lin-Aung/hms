@@ -18,6 +18,22 @@
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
+    @role('admin')
+    <!-- Nav Item - Users Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('admin/user*')) collapsed @endif " href="#" data-toggle="collapse" data-target="#collapseuser"
+            aria-expanded="true" aria-controls="collapseuser">
+            <i class="fas fa-fw fa-users" aria-hidden="true"></i>
+            <span>Users</span>
+        </a>
+        <div id="collapseuser" class="collapse @if(request()->is('admin/user*')) show @endif " aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('admin.user.create') }}">Add New</a>
+                <a class="collapse-item" href="{{ route('admin.user.index') }}">View All</a>
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Roomservice Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if(!request()->is('admin/room-service*')) collapsed @endif " href="#" data-toggle="collapse" data-target="#collapseservice"
@@ -60,6 +76,7 @@
             </div>
         </div>
     </li>
+    @endrole
     <!-- Nav Item - Customer Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if(!request()->is('admin/customer*')) collapsed @endif " href="#" data-toggle="collapse" data-target="#collapsecustomer"
@@ -77,12 +94,14 @@
         </div>
     </li>
 
+    @role('admin')
     <!-- Nav Item - Report -->
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.report') }}">
             <i class="fa fa-flag" aria-hidden="true"></i>
             <span>Report</span></a>
     </li>
+    @endrole
     
 </ul>
 <!-- End of Sidebar -->

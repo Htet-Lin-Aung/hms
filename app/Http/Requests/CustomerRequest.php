@@ -37,6 +37,7 @@ class CustomerRequest extends FormRequest
             'check_in' => 'required|date',
             'check_out' => 'required|date',
             'status' => 'nullable',
+            'revenue_source' => 'required',
             'images' => 'required|array|max:2',
             'images.*' => 'mimes:jpg,png,jpeg|max:4000'
         ];

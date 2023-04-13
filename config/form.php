@@ -78,5 +78,20 @@ return [
 			'value' => 'ယာယီ',
 		],
 	],
+
+	'revenue_source' => [
+		[
+			'name' => 'Direct',
+			'value' => 'direct',
+		],
+		[
+			'name' => 'Social',
+			'value' => 'social',
+		],
+		[
+			'name' => 'Referral',
+			'value' => 'referral',
+		],
+	],
 ];
 ?>

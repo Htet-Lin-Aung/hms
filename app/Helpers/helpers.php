@@ -39,4 +39,10 @@ use App\Models\Nrc;
             return $nrcs;
         }
     }
+
+    if(! function_exists('get_revenue_sources')) {
+        function get_revenue_sources(){
+            return config('form.revenue_source');
+        }
+    }
 ?>
