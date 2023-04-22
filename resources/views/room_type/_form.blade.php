@@ -47,7 +47,8 @@
                 
                 <div class="row mt-3 imageWrapper">
                     <div class="col-md-2 required">
-                        <label for="images">Images</label>
+                        <label for="images">Images</label><br><span class="fs-4">( less than five )</span>
+
                     </div>
                     <div class="col-md-8">
                         <div class="custom-file mb-3">
@@ -61,6 +62,13 @@
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-8">
+                      <div id="upload_preview" class="row" style="margin:10px;"></div>
+                  </div>
                 </div>
 
                 @if($room_type)
@@ -83,3 +91,6 @@
 </div>
 <!-- /.container-fluid -->
 @endsection
+@section('scripts')
+@include('common.image_preview')
+@stop

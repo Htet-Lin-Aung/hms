@@ -36,8 +36,8 @@ class Customer extends Model implements HasMedia
         return $this->transactions()->wherePaymentType('prepaid')->sum('amount');
     }
 
-     public function getBalanceAttribute()
+    public function getBalanceAttribute()
     {
-        return $this->transactions()->sum('amount');
+        return $this->transactions()->wherePaymentType('balance')->sum('amount');
     }
 }

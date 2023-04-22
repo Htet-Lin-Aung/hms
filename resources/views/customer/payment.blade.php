@@ -23,7 +23,7 @@
                         </tr>
                         <tr>
                             <th>Balance</th>
-                            <td>{{$customer->room->price - $customer->balance}} MMK</td>
+                            <td>{{$customer->balance}} MMK</td>
                         </tr>
                         <tr>
                             <th>Total</th>

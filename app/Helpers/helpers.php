@@ -10,13 +10,13 @@ use App\Models\Nrc;
 
     if(! function_exists('get_nrc_townships')) {
         function get_nrc_townships(){
-            return Nrc::pluck('township_mm','id');
+            return Nrc::pluck('township_en','id');
         }
     }
 
     if(! function_exists('get_township_name')) {
         function get_township_name($id){
-            return Nrc::whereId($id)->pluck('township_mm')->first();
+            return Nrc::whereId($id)->pluck('township_en')->first();
         }
     }
 
@@ -34,7 +34,7 @@ use App\Models\Nrc;
 
      if(! function_exists('getNrcTownshipCodesByRegionCode')){
         function getNrcTownshipCodesByRegionCode($region_code){
-            $nrcs = Nrc::whereRegionEn($region_code)->select('id','township_mm')->get();
+            $nrcs = Nrc::whereRegionEn($region_code)->select('id','township_en')->get();
 
             return $nrcs;
         }

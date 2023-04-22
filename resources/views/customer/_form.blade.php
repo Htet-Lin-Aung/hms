@@ -304,7 +304,7 @@ function getNrcTownship(region_code)
                 for(township of response){
                     $('#nrc_township').append($('<option>', {
                         value: township.id,
-                        text : township.township_mm
+                        text : township.township_en
                     }));
                 }
             }

@@ -29,7 +29,7 @@
                                 <td>{{ $index+1 }}</td>
                                 <td>{{ $room_service->name }}</td>
                                 <td>
-                                    <a href="{{ route('admin.room-service.show',$room_service) }}" class="btn btn-info btn-sm"> <i class="fa fa-eye"></i></a>
+                                    <!-- <a href="{{ route('admin.room-service.show',$room_service) }}" class="btn btn-info btn-sm"> <i class="fa fa-eye"></i></a> -->
                                     <a href="{{ route('admin.room-service.edit',$room_service) }}" class="btn btn-primary btn-sm"> <i class="fa fa-edit"></i> </a>
                                     <form action="{{ route('admin.room-service.destroy',$room_service)  }}" method="POST" class="d-unset">
                                         @method('DELETE')

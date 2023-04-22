@@ -28,6 +28,7 @@
                             <th>To Change</th>
                             @endif
                             <th>Payment</th>
+                            <th>Payment Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -35,7 +36,7 @@
 						@foreach ($customers as $index=>$customer )
 							<tr>
 								<td>{{ $index+1 }}</td>
-								<td>{{ $customer->room_id }}</td>
+								<td>{{ $customer->room->room_no }}</td>
 								<td>{{ $customer->name }}</td>
 								<td>{{ $customer->nrc }}</td>
 								<td>{{ $customer->phone }}</td>
@@ -51,6 +52,7 @@
                                     </button>
                                     @include('customer.payment')
                                 </td>
+                                <td>{{ $customer->payment_status }}</td>
 								<td>
 									<a href="{{ route('admin.customer.show',$customer) }}" class="btn btn-info btn-sm"> <i class="fa fa-eye"></i></a>
                                     @if(request()->status != 'checkout')

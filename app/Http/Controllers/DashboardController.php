@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
         //room count
         $room_count =Room::select('id','room_no')
-        ->whereDoesntHave('customers', function($q) {
+                ->whereDoesntHave('customers', function($q) {
                     $q->where('check_in', '<=', today())
                         ->where('check_out', '>', today())
                         ->where('status', '<>', 'checkout');
@@ -52,7 +52,20 @@ class DashboardController extends Controller
             ->pluck('amount')
             ->toArray();
 
-        $revenue_sources = [50,25,25];
+        // $revenue_sources = DB::table(DB::raw('(SELECT "direct" as revenue_source UNION SELECT "social" as revenue_source UNION SELECT "referral" as revenue_source) as rs'))
+        // ->leftJoin('customers as c', 'rs.revenue_source', '=', 'c.revenue_source')
+        // ->select('rs.revenue_source', DB::raw('COALESCE(COUNT(c.id), 0) as count'))
+        // ->groupBy('rs.revenue_source')
+        // ->get()
+        // ->pluck('count', 'revenue_source')
+        // ->toArray();
+
+        $revenue_sources = DB::table(DB::raw('(SELECT "direct" as revenue_source UNION SELECT "social" as revenue_source UNION SELECT "referral" as revenue_source) as rs'))
+        ->leftJoin('customers as c', 'rs.revenue_source', '=', 'c.revenue_source')
+        ->select(DB::raw('COALESCE(COUNT(c.id), 0) as count'))
+        ->groupBy('rs.revenue_source')
+        ->pluck('count')
+        ->toArray();
 
         return view('dashboard',compact('customers','room_count','monthlyAmounts','revenue_sources'));
     }
